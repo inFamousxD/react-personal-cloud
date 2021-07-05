@@ -4,7 +4,7 @@ import React from 'react';
 import {
     Col, Container, Row
 } from 'react-bootstrap';
-
+import { Scrollbars } from 'react-custom-scrollbars';
 import notesDataSet from './notesData';
 
 const Notes = () => {
@@ -34,9 +34,8 @@ const Notes = () => {
         dark: {
             width: '100%',
             color: '#eee',
-            backgroundColor: '#333',
+            backgroundColor: '#222',
             padding: '3vh 2vw',
-            marginBottom: '15vh'
         }
     }
 
@@ -61,7 +60,7 @@ const Notes = () => {
         // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
         transform: 'translateZ(0)',
         fontFamily: 'Raleway',
-        margin: '4vh 0vw'
+        margin: '1vh 0vw'
     }
 
     const handleFolderChange = (index) => {
@@ -124,6 +123,9 @@ const Notes = () => {
                 }}>
                     <Container fluid style={containerStyle.dark}>
                         <h4>Saved Notes in <span style={{color: '#CA4246'}}>{folders[openFolder]}</span></h4>
+                        <Scrollbars autoHide autoHideTimeout={1000} style={{height: '72vh'}}renderThumbVertical={({ style, ...props }) =>
+                            <div {...props} style={{ ...style, backgroundColor: '#CA4246', width: '4px', opacity: '0.5'}}/>
+                        }>
                         <GridList cellHeight={400} spacing={4} style={gridListStyle}>
                             {
                                 notesData[openFolder].notes.map((note, index) => (
@@ -148,6 +150,7 @@ const Notes = () => {
                                 ))
                             }
                         </GridList>
+                        </Scrollbars>
                     </Container>
                 </div>
             </Col>
