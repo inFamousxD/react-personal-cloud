@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/react-personal-cloud/static/css/main.0a8d30e5.chunk.css",
+    "main.js": "/react-personal-cloud/static/js/main.0f85a33a.chunk.js",
+    "main.js.map": "/react-personal-cloud/static/js/main.0f85a33a.chunk.js.map",
+    "runtime-main.js": "/react-personal-cloud/static/js/runtime-main.9be0f2d0.js",
+    "runtime-main.js.map": "/react-personal-cloud/static/js/runtime-main.9be0f2d0.js.map",
+    "static/js/2.4a03c0ae.chunk.js": "/react-personal-cloud/static/js/2.4a03c0ae.chunk.js",
+    "static/js/2.4a03c0ae.chunk.js.map": "/react-personal-cloud/static/js/2.4a03c0ae.chunk.js.map",
+    "index.html": "/react-personal-cloud/index.html",
+    "static/css/main.0a8d30e5.chunk.css.map": "/react-personal-cloud/static/css/main.0a8d30e5.chunk.css.map",
+    "static/js/2.4a03c0ae.chunk.js.LICENSE.txt": "/react-personal-cloud/static/js/2.4a03c0ae.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.9be0f2d0.js",
+    "static/js/2.4a03c0ae.chunk.js",
+    "static/css/main.0a8d30e5.chunk.css",
+    "static/js/main.0f85a33a.chunk.js"
+  ]
+}
