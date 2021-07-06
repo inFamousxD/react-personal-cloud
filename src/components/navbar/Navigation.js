@@ -38,7 +38,9 @@ const title = {
 	fontFamily: 'Raleway',
 	fontWeight: '500',
 	fontSize: '1.35em',
-	marginBottom: '0.8em'
+	marginBottom: '0.8em',
+	userSelect: 'none',
+	cursor: 'pointer'
 }
 
 const Navigation = ({expandNavbar, expandNavbarHandler, setSelected}) => {

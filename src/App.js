@@ -15,13 +15,13 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <Navigation expandNavbar={expandNavbar} expandNavbarHandler={expandNavbarHandler} setSelected={setSelected}/>
-      <Dash expandNavbarHandler={expandNavbarHandler} selected={selected} setSelected={setSelected}/>
-      {
-        selected === 0 ? <Notes /> : ``
-      }
-    </div>
+      <div className="App">
+        <Navigation expandNavbar={expandNavbar} expandNavbarHandler={expandNavbarHandler} setSelected={setSelected}/>
+        <Dash expandNavbarHandler={expandNavbarHandler} selected={selected} setSelected={setSelected}/>
+        {
+          selected === 0 && <Notes selected={selected}/>
+        }
+      </div>
   );
 }
 

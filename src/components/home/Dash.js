@@ -4,13 +4,6 @@ import CardContent from '@material-ui/core/CardContent';
 import { IconButton } from '@material-ui/core';
 import { DescriptionOutlined, LinkOutlined, OutlinedFlag, BookOutlined } from '@material-ui/icons';
 
-const dash = {
-	width: '100%',
-	margin: 'auto',
-	backgroundColor: '#222',
-	fontFamily: 'Raleway',
-}
-
 const dashButtons = {
 	color: 'white',
 	margin: '0vh 1vw',
@@ -26,9 +19,26 @@ const Dash = ({ expandNavbarHandler, selected, setSelected }) => {
 		setSelected(index);
 	}
 
+	const [dash, setDash] = React.useState({
+		width: '100%',
+		margin: 'auto',
+		backgroundColor: '#222',
+		fontFamily: 'Raleway',
+		transition: 'display 1s ease'
+	});
+
 	React.useEffect(() => {
-		if (selected !== -1) expandNavbarHandler(false);
-	}, [selected, expandNavbarHandler])
+		if (selected !== -1) {
+			expandNavbarHandler(false);
+			setDash({
+				...dash, display: 'none'
+			})
+		} else {
+			setDash({
+				...dash, display: 'block'
+			})
+		}
+	}, [selected, expandNavbarHandler, dash])
 
 	return (
 		<div>

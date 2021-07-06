@@ -7,12 +7,11 @@ import {
 import { Scrollbars } from 'react-custom-scrollbars';
 import notesDataSet from './notesData';
 
-const Notes = () => {
+const Notes = ({ selected }) => {
     const [folders, setFolders] = React.useState([]);
     const [openFolder, setOpenFolder] = React.useState(0);
     const [loading, setLoading] = React.useState(true);
     const [notesData, setNotesData] = React.useState([]);
-
 
     React.useEffect(() => {
         setNotesData(notesDataSet);
@@ -78,7 +77,7 @@ const Notes = () => {
     }
 
     return (
-        !loading && <Row style={{width: '80%', margin: 'auto'}}>
+        !loading && <Row style={{ width: '80%', margin: 'auto' }}>
             <Col xs={3} sm={3} md={3} lg={3} xl={3}>
                 <Container fluid style={{...containerStyle.dark, width: '100%'}}>
                     <h4 style={{marginBottom: '4vh'}}>Folders</h4>
@@ -123,7 +122,7 @@ const Notes = () => {
                 }}>
                     <Container fluid style={containerStyle.dark}>
                         <h4>Saved Notes in <span style={{color: '#CA4246'}}>{folders[openFolder]}</span></h4>
-                        <Scrollbars autoHide autoHideTimeout={1000} style={{height: '72vh'}}renderThumbVertical={({ style, ...props }) =>
+                        <Scrollbars autoHide autoHideTimeout={1000} style={{height: '82vh'}}renderThumbVertical={({ style, ...props }) =>
                             <div {...props} style={{ ...style, backgroundColor: '#CA4246', width: '4px', opacity: '0.5'}}/>
                         }>
                         <GridList cellHeight={400} spacing={4} style={gridListStyle}>
