@@ -1,5 +1,5 @@
 import { Card, CardContent, GridList, GridListTile } from '@material-ui/core';
-import { AdjustOutlined, ArrowRightAlt, StarRounded } from '@material-ui/icons';
+import { ArrowRightAlt, DoneAllRounded, StarRounded } from '@material-ui/icons';
 import React from 'react';
 import {
     Col, Container, Row
@@ -137,7 +137,7 @@ const Notes = ({ selected }) => {
                                                     </Col>
                                                     <Col sm={1} xs={1} md={1} lg={1} xl={1}>
                                                         { note.important ? <StarRounded style={{color: 'yellow', float: 'right'}}/> : ``}
-                                                        { <AdjustOutlined style={ progressStyle[note.progress] }/> }
+                                                        { <DoneAllRounded style={ progressStyle[note.progress] }/> }
                                                     </Col>
                                                 </Row>
                                                 <span style={{color: '#aaa', fontWeight: '400', fontSize: '1em'}}>{new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(Date.now())}</span>
