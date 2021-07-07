@@ -7,11 +7,17 @@ import {
 import { Scrollbars } from 'react-custom-scrollbars';
 import notesDataSet from './notesData';
 
-const Notes = ({ selected }) => {
+import { useMediaQuery } from 'react-responsive';
+
+import './Notes.css';
+
+const Notes = () => {
     const [folders, setFolders] = React.useState([]);
     const [openFolder, setOpenFolder] = React.useState(0);
     const [loading, setLoading] = React.useState(true);
     const [notesData, setNotesData] = React.useState([]);
+
+    const isPhone = useMediaQuery({ query: '(max-width: 1224px)' });
 
     React.useEffect(() => {
         setNotesData(notesDataSet);
@@ -35,6 +41,14 @@ const Notes = ({ selected }) => {
             color: '#eee',
             backgroundColor: '#222',
             padding: '3vh 2vw',
+        },
+        mobileDark: {
+            width: '100%',
+            color: '#eee',
+            backgroundColor: '#222',
+            padding: '0',
+            margin: '0',
+            fontSize: '1.7vh'
         }
     }
 
@@ -53,7 +67,7 @@ const Notes = ({ selected }) => {
         }
     ]
 
-    const gridListStyle= {
+    const gridListStyle = {
         width: '100%',
         // height: '100%',
         // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
@@ -76,9 +90,20 @@ const Notes = ({ selected }) => {
         transition: 'color 0.25s'
     }
 
+    const parentRowStyle = {
+        mobile: {
+            width: '100%',
+            margin: 'auto'
+        },
+        desktop: {
+            width: '80%',
+            margin: 'auto'
+        }
+    }
+
     return (
-        !loading && <Row style={{ width: '80%', margin: 'auto' }}>
-            <Col xs={3} sm={3} md={3} lg={3} xl={3}>
+        !loading && <Row style={isPhone ? parentRowStyle.mobile : parentRowStyle.desktop}>
+            <Col xs={12} sm={12} md={3} lg={3} xl={3}>
                 <Container fluid style={{...containerStyle.dark, width: '100%'}}>
                     <h4 style={{marginBottom: '4vh'}}>Folders</h4>
                     {
@@ -114,9 +139,9 @@ const Notes = ({ selected }) => {
                     }
                 </Container>
             </Col>
-            <Col xs={9} sm={9} md={9} lg={9} xl={9}>
+            {/* notes screen for PC */}
+            { !isPhone && <Col xs={12} sm={12} md={9} lg={9} xl={9} className='notes-mdplus'>
                 <div style={{
-                    display: 'flex',
                     flexWrap: 'wrap',
                     justifyContent: 'space-around',
                 }}>
@@ -132,10 +157,10 @@ const Notes = ({ selected }) => {
                                         <Card style={{ backgroundColor: '#292929', height: '45vh' }}>
                                             <CardContent>
                                                 <Row>
-                                                    <Col sm={11} xs={11} md={11} lg={11} xl={11}>
+                                                    <Col sm={12} xs={12} md={11} lg={11} xl={11}>
                                                         <span style={{color: '#eee', fontWeight: '500', fontSize: '1.2em'}}>{note.title}</span><br />
                                                     </Col>
-                                                    <Col sm={1} xs={1} md={1} lg={1} xl={1}>
+                                                    <Col sm={12} xs={12} md={1} lg={1} xl={1}>
                                                         { note.important ? <StarRounded style={{color: 'yellow', float: 'right'}}/> : ``}
                                                         { <DoneAllRounded style={ progressStyle[note.progress] }/> }
                                                     </Col>
@@ -152,7 +177,49 @@ const Notes = ({ selected }) => {
                         </Scrollbars>
                     </Container>
                 </div>
-            </Col>
+            </Col>}
+
+            {/* =================================================================================================== */}
+            {/* notes screen for Mobile */}
+
+            { <Col xs={12} sm={12} md={9} lg={9} xl={9} className='notes-mdplus'>
+                <div style={{
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-around',
+                }}>
+                    <Container fluid style={containerStyle.mobileDark}>
+                        <h4>Saved Notes in <span style={{color: '#CA4246'}}>{folders[openFolder]}</span></h4>
+                        <Scrollbars autoHide autoHideTimeout={1000} style={{height: '82vh'}}renderThumbVertical={({ style, ...props }) =>
+                            <div {...props} style={{ ...style, backgroundColor: '#CA4246', width: '4px', opacity: '0.5'}}/>
+                        }>
+                        <GridList cellHeight={300} spacing={4} style={gridListStyle}>
+                            {
+                                notesData[openFolder].notes.map((note, index) => (
+                                    <GridListTile key={index} cols={2} rows={1} >
+                                        <Card style={{ backgroundColor: '#292929', height: '45vh' }}>
+                                            <CardContent>
+                                                <Row>
+                                                    <Col sm={10} xs={10} md={11} lg={11} xl={11}>
+                                                        <span style={{color: '#eee', fontWeight: '500', fontSize: '1.2em'}}>{note.title}</span><br />
+                                                    </Col>
+                                                    <Col sm={1} xs={1} md={1} lg={1} xl={1}>
+                                                        { note.important ? <StarRounded style={{color: 'yellow'}}/> : ``}
+                                                        { <DoneAllRounded style={ {...progressStyle[note.progress], float: 'none'} }/> }
+                                                    </Col>
+                                                </Row>
+                                                <span style={{color: '#aaa', fontWeight: '400', fontSize: '1em'}}>{new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(Date.now())}</span>
+                                                <br /><br /><br />
+                                                <div style={{color: '#bbb', fontWeight: '500', fontSize: '1.1em', textAlign: 'justify'}}>{note.note}</div>
+                                            </CardContent>
+                                        </Card>
+                                    </GridListTile>
+                                ))
+                            }
+                        </GridList>
+                        </Scrollbars>
+                    </Container>
+                </div>
+            </Col>}
         </Row>
     )
 }

@@ -19,7 +19,7 @@ function App() {
         <Navigation expandNavbar={expandNavbar} expandNavbarHandler={expandNavbarHandler} setSelected={setSelected}/>
         <Dash expandNavbarHandler={expandNavbarHandler} selected={selected} setSelected={setSelected}/>
         {
-          selected === 0 && <Notes selected={selected}/>
+          selected === 0 && <Notes/>
         }
       </div>
   );
