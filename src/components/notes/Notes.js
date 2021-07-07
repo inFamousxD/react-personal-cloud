@@ -1,5 +1,5 @@
 import { Card, CardContent, GridList, GridListTile } from '@material-ui/core';
-import { ArrowRightAlt, DoneAllRounded, StarRounded } from '@material-ui/icons';
+import { AddCircleOutlineRounded, ArrowDownwardRounded, ArrowRightAlt, ArrowUpwardRounded, DoneAllRounded, StarRounded } from '@material-ui/icons';
 import React from 'react';
 import {
     Col, Container, Row
@@ -32,8 +32,10 @@ const Notes = () => {
             setFolders(temp);
 
             setLoading(false)
+
+            !isPhone && setFolderCollapseState(false)
         }
-    }, [notesData, loading])
+    }, [notesData, loading, isPhone])
 
     const containerStyle = {
         dark: {
@@ -55,15 +57,15 @@ const Notes = () => {
     const progressStyle = [
         {
             color: 'red',
-            float: 'right'
+            // float: 'right'
         },
         {
             color: 'orange',
-            float: 'right'
+            // float: 'right'
         },
         {
             color: 'green',
-            float: 'right'
+            // float: 'right'
         }
     ]
 
@@ -72,8 +74,9 @@ const Notes = () => {
         // height: '100%',
         // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
         transform: 'translateZ(0)',
-        fontFamily: 'Raleway',
-        margin: '1vh 0vw'
+        fontFamily: 'Quicksand',
+        margin: '1vh 0vw',
+        fontWeight: '600'
     }
 
     const handleFolderChange = (index) => {
@@ -101,15 +104,35 @@ const Notes = () => {
         }
     }
 
+    const [folderCollapseState, setFolderCollapseState] = React.useState(true);
+    const collapseFolders = () => {
+        setFolderCollapseState(!folderCollapseState);
+    }
+
+    const gridListCardStyle = { backgroundColor: '#292929', height: '45vh' }
+
     return (
         !loading && <Row style={isPhone ? parentRowStyle.mobile : parentRowStyle.desktop}>
             <Col xs={12} sm={12} md={3} lg={3} xl={3}>
                 <Container fluid style={{...containerStyle.dark, width: '100%'}}>
-                    <h4 style={{marginBottom: '4vh'}}>Folders</h4>
+                    <Row>
+                        <Col xs={10} sm={10} md={10} lg={10} xl={10}>
+                            <h4 style={folderCollapseState ? {marginBottom: '1vh'} : {marginBottom: '4vh'}}>Folders</h4>
+                        </Col>
+                        <Col xs={1} sm={1} md={1} lg={1} xl={1} style={{
+                            marginTop: '0.25em',
+                            userSelect: 'none',
+                            cursor: 'pointer'
+                        }}>
+                            {!folderCollapseState && <AddCircleOutlineRounded />}
+                            {isPhone && !folderCollapseState && <ArrowUpwardRounded onClick={() => {collapseFolders()}} />}
+                            {isPhone && folderCollapseState && <ArrowDownwardRounded onClick={() => {collapseFolders()}} />}
+                        </Col>
+                    </Row>
                     {
                         folders.map((folder, index) => {
                             return (
-                                <Row onClick={() => {handleFolderChange(index)}}>
+                                <Row onClick={() => {handleFolderChange(index)}} style={folderCollapseState ? {display: 'none'} : {}}>
                                     <Col xs={10} sm={10} md={10} lg={10} xl={10}>
                                     <div key={index} style={
                                         index === openFolder ? {
@@ -133,7 +156,7 @@ const Notes = () => {
                                         }/>
                                     </Col>
                                 </Row>
-                                
+
                             )
                         })
                     }
@@ -144,6 +167,7 @@ const Notes = () => {
                 <div style={{
                     flexWrap: 'wrap',
                     justifyContent: 'space-around',
+                    fontFamily: 'Quicksand'
                 }}>
                     <Container fluid style={containerStyle.dark}>
                         <h4>Saved Notes in <span style={{color: '#CA4246'}}>{folders[openFolder]}</span></h4>
@@ -153,15 +177,15 @@ const Notes = () => {
                         <GridList cellHeight={400} spacing={4} style={gridListStyle}>
                             {
                                 notesData[openFolder].notes.map((note, index) => (
-                                    <GridListTile key={index} cols={note.important ? 2 : 1} rows={1} >
-                                        <Card style={{ backgroundColor: '#292929', height: '45vh' }}>
+                                    <GridListTile key={index} cols={0.5} rows={1} >
+                                        <Card style={note.important ? {...gridListCardStyle, borderTop: '1px solid gold'} : gridListCardStyle}>
                                             <CardContent>
                                                 <Row>
-                                                    <Col sm={12} xs={12} md={11} lg={11} xl={11}>
+                                                    <Col sm={12} xs={12} md={12} lg={12} xl={12}>
                                                         <span style={{color: '#eee', fontWeight: '500', fontSize: '1.2em'}}>{note.title}</span><br />
                                                     </Col>
-                                                    <Col sm={12} xs={12} md={1} lg={1} xl={1}>
-                                                        { note.important ? <StarRounded style={{color: 'yellow', float: 'right'}}/> : ``}
+                                                    <Col sm={12} xs={12} md={12} lg={12} xl={12}>
+                                                        { note.important && <StarRounded style={{color: 'gold'}}/> }
                                                         { <DoneAllRounded style={ progressStyle[note.progress] }/> }
                                                     </Col>
                                                 </Row>
@@ -182,7 +206,7 @@ const Notes = () => {
             {/* =================================================================================================== */}
             {/* notes screen for Mobile */}
 
-            { <Col xs={12} sm={12} md={9} lg={9} xl={9} className='notes-mdplus'>
+            { isPhone && <Col xs={12} sm={12} md={9} lg={9} xl={9} className='notes-mdplus'>
                 <div style={{
                     flexWrap: 'wrap',
                     justifyContent: 'space-around',
@@ -196,7 +220,7 @@ const Notes = () => {
                             {
                                 notesData[openFolder].notes.map((note, index) => (
                                     <GridListTile key={index} cols={2} rows={1} >
-                                        <Card style={{ backgroundColor: '#292929', height: '45vh' }}>
+                                        <Card style={note.important ? {...gridListCardStyle, borderTop: '1px solid gold'} : gridListCardStyle}>
                                             <CardContent>
                                                 <Row>
                                                     <Col sm={10} xs={10} md={11} lg={11} xl={11}>
