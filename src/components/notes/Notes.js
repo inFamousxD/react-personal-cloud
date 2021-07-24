@@ -9,15 +9,47 @@ import notesDataSet from './notesData';
 
 import { useMediaQuery } from 'react-responsive';
 
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import { makeStyles } from '@material-ui/core';
+import Slide from '@material-ui/core/Slide';
+
 import './Notes.css';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        backgroundColor: '#232323',
+        color: '#ccc',
+        borderRadius: '20px',
+        fontWeight: '400', 
+        fontSize: '1.2em'
+    },
+    paper: {
+        backgroundColor: '#222'
+    },
+    title: {
+        fontWeight: '500',
+        fontSize: '1.3em',
+        color: '#eee'
+    }
+}))
 
 const Notes = () => {
     const [folders, setFolders] = React.useState([]);
     const [openFolder, setOpenFolder] = React.useState(0);
     const [loading, setLoading] = React.useState(true);
     const [notesData, setNotesData] = React.useState([]);
+    const [open, setOpen] = React.useState(false);
 
     const isPhone = useMediaQuery({ query: '(max-width: 1224px)' });
+
+    const classes = useStyles();
 
     React.useEffect(() => {
         setNotesData(notesDataSet);
@@ -49,7 +81,7 @@ const Notes = () => {
             color: '#eee',
             backgroundColor: '#222',
             padding: '0',
-            margin: '0',
+            margin: '1vh 0 0 0',
             fontSize: '1.7vh'
         }
     }
@@ -109,14 +141,22 @@ const Notes = () => {
         setFolderCollapseState(!folderCollapseState);
     }
 
+    const [currentNote, setCurrentNote] = React.useState({})
     const handleOpenNote = (note) => {
         console.log(note);
+        setCurrentNote(note);
+        setOpen(true);
     }
 
-    const gridListCardStyle = { backgroundColor: '#292929', height: '45vh', cursor: 'pointer' }
+    const handleCloseNote = () => {
+        setCurrentNote({});
+        setOpen(false);
+      };
+
+    const gridListCardStyle = { backgroundColor: '#292929', height: '12vh', cursor: 'pointer', userSelect: 'none' }
 
     return (
-        !loading && <Row style={isPhone ? parentRowStyle.mobile : parentRowStyle.desktop}>
+        !loading && <div><Row style={isPhone ? parentRowStyle.mobile : parentRowStyle.desktop}>
             <Col xs={12} sm={12} md={3} lg={3} xl={3}>
                 <Container fluid style={{...containerStyle.dark, width: '100%'}}>
                     <Row>
@@ -175,14 +215,14 @@ const Notes = () => {
                 }}>
                     <Container fluid style={containerStyle.dark}>
                         <h4>Saved Notes in <span style={{color: '#CA4246'}}>{folders[openFolder]}</span></h4>
-                        <Scrollbars autoHide autoHideTimeout={1000} style={{height: '82vh'}}renderThumbVertical={({ style, ...props }) =>
+                        <Scrollbars autoHide autoHideTimeout={1000} style={{height: '73vh'}}renderThumbVertical={({ style, ...props }) =>
                             <div {...props} style={{ ...style, backgroundColor: '#CA4246', width: '4px', opacity: '0.5'}}/>
                         }>
-                        <GridList cellHeight={400} spacing={4} style={gridListStyle}>
+                        <GridList cellHeight={120} spacing={4} style={gridListStyle}>
                             {
                                 notesData[openFolder].notes.map((note, index) => (
-                                    <GridListTile key={index} cols={0.5} rows={1} >
-                                        <Card onClick={() => {handleOpenNote(note)}} style={note.important ? {...gridListCardStyle, borderTop: '1px solid gold'} : gridListCardStyle}>
+                                    <GridListTile key={index} cols={2} rows={1} >
+                                        <Card onClick={() => {handleOpenNote(note)}} style={note.important ? {...gridListCardStyle, borderTop: '2px solid gold'} : gridListCardStyle}>
                                             <CardContent>
                                                 <Row>
                                                     <Col sm={12} xs={12} md={12} lg={12} xl={12}>
@@ -193,9 +233,9 @@ const Notes = () => {
                                                         { <DoneAllRounded style={ progressStyle[note.progress] }/> }
                                                     </Col>
                                                 </Row>
-                                                <span style={{color: '#aaa', fontWeight: '400', fontSize: '1em'}}>{new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(Date.now())}</span>
-                                                <br /><br /><br />
-                                                <div style={{color: '#bbb', fontWeight: '500', fontSize: '1.1em', textAlign: 'justify'}}>{note.note}</div>
+                                                <span style={{color: '#aaa', fontWeight: '100', fontSize: '1em'}}>{new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(Date.now())}</span>
+                                                {/* <br /><br /><br />
+                                                <div style={{color: '#bbb', fontWeight: '500', fontSize: '1.1em', textAlign: 'justify'}}>{note.note}</div> */}
                                             </CardContent>
                                         </Card>
                                     </GridListTile>
@@ -220,11 +260,11 @@ const Notes = () => {
                         <Scrollbars autoHide autoHideTimeout={1000} style={{height: '82vh'}}renderThumbVertical={({ style, ...props }) =>
                             <div {...props} style={{ ...style, backgroundColor: '#CA4246', width: '4px', opacity: '0.5'}}/>
                         }>
-                        <GridList cellHeight={300} spacing={4} style={gridListStyle}>
+                        <GridList cellHeight={100} spacing={4} style={gridListStyle}>
                             {
                                 notesData[openFolder].notes.map((note, index) => (
                                     <GridListTile key={index} cols={2} rows={1} >
-                                        <Card style={note.important ? {...gridListCardStyle, borderTop: '1px solid gold'} : gridListCardStyle}>
+                                        <Card onClick={() => {handleOpenNote(note)}} style={note.important ? {...gridListCardStyle, borderTop: '2px solid gold', height: '12vh'} : gridListCardStyle}>
                                             <CardContent>
                                                 <Row>
                                                     <Col sm={10} xs={10} md={11} lg={11} xl={11}>
@@ -236,8 +276,8 @@ const Notes = () => {
                                                     </Col>
                                                 </Row>
                                                 <span style={{color: '#aaa', fontWeight: '400', fontSize: '1em'}}>{new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(Date.now())}</span>
-                                                <br /><br /><br />
-                                                <div style={{color: '#bbb', fontWeight: '500', fontSize: '1.1em', textAlign: 'justify'}}>{note.note}</div>
+                                                {/* <br /><br /><br />
+                                                <div style={{color: '#bbb', fontWeight: '500', fontSize: '1.1em', textAlign: 'justify'}}>{note.note}</div> */}
                                             </CardContent>
                                         </Card>
                                     </GridListTile>
@@ -249,6 +289,39 @@ const Notes = () => {
                 </div>
             </Col>}
         </Row>
+        <Dialog
+            open={open}
+            TransitionComponent={Transition}
+            keepMounted
+            fullWidth={true}
+            maxWidth={'md'}
+            scroll={'paper'}
+            onClose={handleCloseNote}
+            aria-labelledby="alert-dialog-slide-title"
+            aria-describedby="alert-dialog-slide-description"
+
+            classes={{
+                paper: classes.paper
+            }}
+        >
+            <DialogContent className={classes.title} id="alert-dialog-slide-title">{currentNote.title}</DialogContent>
+            <DialogContent className={classes.root} id="alert-dialog-slide-title"><span style={{color: '#aaa', fontWeight: '400', fontSize: '1em'}}>{new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(Date.now())}</span></DialogContent>
+            <DialogContent className={classes.root}>
+                {currentNote.note}
+            </DialogContent>
+            <DialogActions className={classes.root}>
+            <Button color="secondary" style={ currentNote.important ? { color: 'gold' } : {  } }>
+                Important
+            </Button>
+            <Button onClick={handleCloseNote} color="secondary">
+                Delete
+            </Button>
+            <Button onClick={handleCloseNote} color="secondary">
+                Close
+            </Button>
+            </DialogActions>
+        </Dialog>
+        </div>
     )
 }
 
