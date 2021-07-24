@@ -109,7 +109,11 @@ const Notes = () => {
         setFolderCollapseState(!folderCollapseState);
     }
 
-    const gridListCardStyle = { backgroundColor: '#292929', height: '45vh' }
+    const handleOpenNote = (note) => {
+        console.log(note);
+    }
+
+    const gridListCardStyle = { backgroundColor: '#292929', height: '45vh', cursor: 'pointer' }
 
     return (
         !loading && <Row style={isPhone ? parentRowStyle.mobile : parentRowStyle.desktop}>
@@ -117,7 +121,7 @@ const Notes = () => {
                 <Container fluid style={{...containerStyle.dark, width: '100%'}}>
                     <Row>
                         <Col xs={10} sm={10} md={10} lg={10} xl={10}>
-                            <h4 style={folderCollapseState ? {marginBottom: '1vh'} : {marginBottom: '4vh'}}>Folders</h4>
+                            <h4 style={folderCollapseState ? {marginBottom: '1vh'} : {marginBottom: '4vh'}}> Folders </h4>
                         </Col>
                         <Col xs={1} sm={1} md={1} lg={1} xl={1} style={{
                             marginTop: '0.25em',
@@ -178,7 +182,7 @@ const Notes = () => {
                             {
                                 notesData[openFolder].notes.map((note, index) => (
                                     <GridListTile key={index} cols={0.5} rows={1} >
-                                        <Card style={note.important ? {...gridListCardStyle, borderTop: '1px solid gold'} : gridListCardStyle}>
+                                        <Card onClick={() => {handleOpenNote(note)}} style={note.important ? {...gridListCardStyle, borderTop: '1px solid gold'} : gridListCardStyle}>
                                             <CardContent>
                                                 <Row>
                                                     <Col sm={12} xs={12} md={12} lg={12} xl={12}>
