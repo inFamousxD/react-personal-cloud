@@ -14,25 +14,18 @@ const Dash = ({ expandNavbarHandler, selected, setSelected }) => {
 		setSelected(index);
 	}
 
-	const [dash, setDash] = React.useState({
+	const [dash] = React.useState({
 		width: '100%',
 		margin: 'auto',
 		backgroundColor: '#222',
 		fontFamily: 'Raleway',
-		transition: 'display 1s ease'
+		display: 'block'
 	});
 
 	React.useEffect(() => {
 		if (selected !== -1) {
 			expandNavbarHandler(false);
-			setDash({
-				...dash, display: 'none'
-			})
-		} else {
-			setDash({
-				...dash, display: 'block'
-			})
-		}
+		} 
 	}, [selected, expandNavbarHandler, dash])
 
 	const buttonTextStyle = { fontWeight: '450', fontSize: '20px', color: '#eee' }
