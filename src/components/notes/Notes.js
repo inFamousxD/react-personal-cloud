@@ -55,8 +55,6 @@ const Notes = () => {
         setNotesData(notesDataSet);
 
         if (notesData !== undefined && notesData !== []) {
-            console.log(notesData)
-
             let temp = [];
             notesData.forEach(folder => {
                 temp.push(folder.folderName);
@@ -143,7 +141,7 @@ const Notes = () => {
 
     const [currentNote, setCurrentNote] = React.useState({})
     const handleOpenNote = (note) => {
-        console.log(note);
+        // console.log(note);
         setCurrentNote(note);
         setOpen(true);
     }
@@ -176,9 +174,9 @@ const Notes = () => {
                     {
                         folders.map((folder, index) => {
                             return (
-                                <Row onClick={() => {handleFolderChange(index)}} style={folderCollapseState ? {display: 'none'} : {}}>
+                                <Row key={index} onClick={() => {handleFolderChange(index)}} style={folderCollapseState ? {display: 'none'} : {}}>
                                     <Col xs={10} sm={10} md={10} lg={10} xl={10}>
-                                    <div key={index} style={
+                                    <div style={
                                         index === openFolder ? {
                                             ...folderStyle, color: '#CA4246'
                                         } : folderStyle
@@ -200,7 +198,6 @@ const Notes = () => {
                                         }/>
                                     </Col>
                                 </Row>
-
                             )
                         })
                     }
@@ -222,7 +219,7 @@ const Notes = () => {
                             {
                                 notesData[openFolder].notes.map((note, index) => (
                                     <GridListTile key={index} cols={2} rows={1} >
-                                        <Card onClick={() => {handleOpenNote(note)}} style={note.important ? {...gridListCardStyle, borderTop: '2px solid gold'} : gridListCardStyle}>
+                                        <Card onClick={() => {handleOpenNote(note)}} style={note.important ? {...gridListCardStyle, borderTop: '1px solid gold'} : gridListCardStyle}>
                                             <CardContent>
                                                 <Row>
                                                     <Col sm={12} xs={12} md={12} lg={12} xl={12}>
@@ -264,7 +261,7 @@ const Notes = () => {
                             {
                                 notesData[openFolder].notes.map((note, index) => (
                                     <GridListTile key={index} cols={2} rows={1} >
-                                        <Card onClick={() => {handleOpenNote(note)}} style={note.important ? {...gridListCardStyle, borderTop: '2px solid gold', height: '12vh'} : gridListCardStyle}>
+                                        <Card onClick={() => {handleOpenNote(note)}} style={note.important ? {...gridListCardStyle, borderTop: '1px solid gold', height: '12vh'} : gridListCardStyle}>
                                             <CardContent>
                                                 <Row>
                                                     <Col sm={10} xs={10} md={11} lg={11} xl={11}>
@@ -305,10 +302,8 @@ const Notes = () => {
             }}
         >
             <DialogContent className={classes.title} id="alert-dialog-slide-title">{currentNote.title}</DialogContent>
-            <DialogContent className={classes.root} id="alert-dialog-slide-title"><span style={{color: '#aaa', fontWeight: '400', fontSize: '1em'}}>{new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(Date.now())}</span></DialogContent>
-            <DialogContent className={classes.root}>
-                {currentNote.note}
-            </DialogContent>
+            <DialogContent className={classes.root}><span style={{color: '#aaa', fontWeight: '400', fontSize: '1em'}}>{new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(Date.now())}</span></DialogContent>
+            <DialogContent className={classes.root}>{currentNote.note}</DialogContent>
             <DialogActions className={classes.root}>
             <Button color="secondary" style={ currentNote.important ? { color: 'gold' } : {  } }>
                 Important
