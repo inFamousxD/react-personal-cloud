@@ -257,7 +257,7 @@ const Notes = ({ projectFirestore }) => {
 
     React.useEffect(() => {
         let fetchAll = [];
-        projectFirestore.collection('notes').get().then((snapshot) => {
+        loading && projectFirestore.collection('notes').get().then((snapshot) => {
             snapshot.docs.forEach((note) => {
                 if (note.id !== 'metadata') {
                     let temp = note.data();
@@ -272,8 +272,9 @@ const Notes = ({ projectFirestore }) => {
         }).then(() => {
             !isPhone && setFolderCollapseState(false)
             setLoading(false);
+            // console.count('fetched');
         })
-    }, [isPhone, projectFirestore])
+    }, [isPhone, projectFirestore, loading])
 
     return (
         !loading && <div><Row style={isPhone ? parentRowStyle.mobile : parentRowStyle.desktop}>
@@ -471,7 +472,7 @@ const Notes = ({ projectFirestore }) => {
             
             <ThemeProvider theme={theme}>
             <DialogContent className={classes.root}>
-                <TextField color='secondary' fullWidth autoFocus margin='dense' id='title' type='text' label='Title' value={newNote.title} onChange={handleTitleChange} InputProps={{ style: { color: 'white', fontSize: '0.85em', fontFamily: 'inherit' } }}></TextField>
+                <TextField color='secondary' autoComplete='off' fullWidth autoFocus margin='dense' id='title' type='text' label='Title' value={newNote.title} onChange={handleTitleChange} InputProps={{ style: { color: 'white', fontSize: '0.85em', fontFamily: 'inherit' }, form: {autocomplete: 'off'} }}></TextField>
                 <TextField color='secondary' fullWidth multiline={true} margin='dense' id='title' type='text' label='Note' value={newNote.note} onChange={handleNoteChange} InputProps={{ style: { color: 'white', fontSize: '0.85em', fontFamily: 'inherit' } }}></TextField>
                 
                 <Row>
