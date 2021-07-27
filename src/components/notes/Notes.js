@@ -394,7 +394,7 @@ const Notes = ({ projectFirestore }) => {
                             {
                                 notesData.map((note, index) => (
                                     note.folder === folders[openFolder] && <GridListTile key={index} cols={2} rows={1} >
-                                        <Card onClick={() => {handleOpenNote(note)}} style={note.important ? {...gridListCardStyle, borderTop: '1px solid gold', height: '11vh'} : gridListCardStyle}>
+                                        <Card onClick={() => {handleOpenNote(note)}} style={note.important ? {...gridListCardStyle, borderTop: '1px solid gold', height: '12vh'} : gridListCardStyle}>
                                             <CardContent>
                                                 <Row>
                                                     <Col sm={10} xs={10} md={11} lg={11} xl={11}>
