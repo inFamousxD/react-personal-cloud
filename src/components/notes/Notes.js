@@ -140,7 +140,7 @@ const Notes = ({ projectFirestore }) => {
         userSelect: 'none',
         cursor: 'pointer',
         fontSize: '1em',
-        padding: '1vh 0vw',
+        padding: '0.7em 0vw',
         transition: 'color 0.25s'
     }
 
@@ -155,7 +155,7 @@ const Notes = ({ projectFirestore }) => {
         }
     }
 
-    const gridListCardStyle = { backgroundColor: '#292929', height: '12vh', cursor: 'pointer', userSelect: 'none' }
+    const gridListCardStyle = { backgroundColor: '#292929', height: '7em', cursor: 'pointer', userSelect: 'none' }
 
     const [newNote, setNewNote] = React.useState({
         title: '',
@@ -394,7 +394,7 @@ const Notes = ({ projectFirestore }) => {
                             {
                                 notesData.map((note, index) => (
                                     note.folder === folders[openFolder] && <GridListTile key={index} cols={2} rows={1} >
-                                        <Card onClick={() => {handleOpenNote(note)}} style={note.important ? {...gridListCardStyle, borderTop: '1px solid gold', height: '12vh'} : gridListCardStyle}>
+                                        <Card onClick={() => {handleOpenNote(note)}} style={note.important ? {...gridListCardStyle, borderTop: '1px solid gold', height: '11vh'} : gridListCardStyle}>
                                             <CardContent>
                                                 <Row>
                                                     <Col sm={10} xs={10} md={11} lg={11} xl={11}>
