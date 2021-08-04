@@ -239,6 +239,19 @@ const Notes = ({ projectFirestore }) => {
         setNewFolder('');
     }
 
+    const handleNoteImportantToggle = (note) => {
+        projectFirestore.collection('notes').doc(note.id).update({
+            important: !note.important
+        }).then(() => {
+            let notes = [];
+            notesData.forEach(xnote => {
+                if (xnote.id === note.id) xnote.important = !note.important;
+                notes.push(xnote);
+            })
+            setNotesData(notes);
+        })
+    } 
+
     React.useEffect(() => {
         let fetchAll = [];
         loading && projectFirestore.collection('notes').get().then((snapshot) => {
@@ -378,7 +391,7 @@ const Notes = ({ projectFirestore }) => {
                             {
                                 notesData.map((note, index) => (
                                     note.folder === folders[openFolder] && <GridListTile key={index} cols={2} rows={1} >
-                                        <Card onClick={() => {handleOpenNote(note)}} style={note.important ? {...gridListCardStyle, borderTop: '1px solid gold', height: '13vh'} : gridListCardStyle}>
+                                        <Card onClick={() => {handleOpenNote(note)}} style={note.important ? {...gridListCardStyle, borderTop: '1px solid gold', height: '12vh'} : gridListCardStyle}>
                                             <CardContent>
                                                 <Row>
                                                     <Col sm={10} xs={10} md={11} lg={11} xl={11}>
@@ -423,7 +436,7 @@ const Notes = ({ projectFirestore }) => {
             <DialogContent className={classes.root}><span style={{color: '#aaa', fontWeight: '400', fontSize: '1em'}}>{new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(currentNote.date)}</span></DialogContent>
             <DialogContent className={classes.root}>{currentNote.note}</DialogContent>
             <DialogActions className={classes.root}>
-            <Button color="secondary" style={ currentNote.important ? { color: 'gold' } : {  } }>
+            <Button color="secondary" style={ currentNote.important ? { color: 'gold' } : {  } } onClick={() => { handleNoteImportantToggle(currentNote) }} >
                 Important
             </Button>
             <Button onClick={() => {handleNoteDelete(currentNote)}} color="secondary">
