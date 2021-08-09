@@ -5,6 +5,7 @@ import Dash from './components/home/Dash';
 import React from 'react';
 
 import Notes from './components/notes/Notes';
+import Studies from './components/studies/Studies';
 
 import firebase from 'firebase/app';
 import 'firebase/storage';
@@ -37,6 +38,9 @@ function App() {
         <Dash expandNavbarHandler={expandNavbarHandler} selected={selected} setSelected={setSelected} />
         {
           selected === 0 && <Notes projectFirestore={projectFirestore}/>
+        }
+        {
+          selected === 3 && <Studies projectFirestore={projectFirestore}/>
         }
       </div>
   );
