@@ -1,16 +1,16 @@
 import { Card, CardContent, createMuiTheme, GridList, GridListTile, ThemeProvider, Checkbox, FormControlLabel, Select, MenuItem } from '@material-ui/core';
 import { AddCircleOutlineRounded, ArrowDownwardRounded, ArrowRightAlt, ArrowUpwardRounded, DoneAllRounded, StarRounded } from '@material-ui/icons';
-import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import { Scrollbars } from 'react-custom-scrollbars';
 import { useMediaQuery } from 'react-responsive';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
+import { Scrollbars } from 'react-custom-scrollbars';
+import { makeStyles } from '@material-ui/core';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import TextField from '@material-ui/core/TextField';
-import { makeStyles } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
+import React from 'react';
 import './Notes.css';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -60,30 +60,18 @@ const Notes = ({ projectFirestore }) => {
     const [loading, setLoading] = React.useState(true);
     const [open, setOpen] = React.useState(false);
     const [openForm, setOpenForm] = React.useState(false);
-    
-    const [notesData, setNotesData] = React.useState([{
-        folderName: 'loading',
-        notes: [
-            {
-                note: 'loading',
-                date: Date.now(),
-                title: 'loading',
-                important: false,
-                progress: 0
-            }
-        ]
-    }]);
+    const [notesData, setNotesData] = React.useState([]);
+    const [currentNote, setCurrentNote] = React.useState({})
+    const [folderCollapseState, setFolderCollapseState] = React.useState(true);
 
     const isPhone = useMediaQuery({ query: '(max-width: 1224px)' });
 
     const classes = useStyles();
 
-    const [folderCollapseState, setFolderCollapseState] = React.useState(true);
     const collapseFolders = () => {
         setFolderCollapseState(!folderCollapseState);
     }
 
-    const [currentNote, setCurrentNote] = React.useState({})
     const handleOpenNote = (note) => {
         setCurrentNote(note);
         setOpen(true);
@@ -119,11 +107,7 @@ const Notes = ({ projectFirestore }) => {
         }
     }
 
-    const progressStyle = [
-        { color: 'red' },
-        { color: 'orange' },
-        { color: 'green' }
-    ]
+    const progressStyle = [{ color: 'red' },{ color: 'orange' },{ color: 'green' }];
 
     const gridListStyle = {
         width: '100%',
@@ -140,7 +124,7 @@ const Notes = ({ projectFirestore }) => {
         userSelect: 'none',
         cursor: 'pointer',
         fontSize: '1em',
-        padding: '1vh 0vw',
+        padding: '0.7em 0vw',
         transition: 'color 0.25s'
     }
 
@@ -155,7 +139,7 @@ const Notes = ({ projectFirestore }) => {
         }
     }
 
-    const gridListCardStyle = { backgroundColor: '#292929', height: '12vh', cursor: 'pointer', userSelect: 'none' }
+    const gridListCardStyle = { backgroundColor: '#292929', height: '7em', cursor: 'pointer', userSelect: 'none' }
 
     const [newNote, setNewNote] = React.useState({
         title: '',
@@ -254,6 +238,19 @@ const Notes = ({ projectFirestore }) => {
         })
         setNewFolder('');
     }
+
+    const handleNoteImportantToggle = (note) => {
+        projectFirestore.collection('notes').doc(note.id).update({
+            important: !note.important
+        }).then(() => {
+            let notes = [];
+            notesData.forEach(xnote => {
+                if (xnote.id === note.id) xnote.important = !note.important;
+                notes.push(xnote);
+            })
+            setNotesData(notes);
+        })
+    } 
 
     React.useEffect(() => {
         let fetchAll = [];
@@ -390,11 +387,11 @@ const Notes = ({ projectFirestore }) => {
                         <Scrollbars autoHide autoHideTimeout={1000} style={{height: '82vh'}}renderThumbVertical={({ style, ...props }) =>
                             <div {...props} style={{ ...style, backgroundColor: '#CA4246', width: '4px', opacity: '0.5'}}/>
                         }>
-                        <GridList cellHeight={100} spacing={4} style={gridListStyle}>
+                        <GridList cellHeight={110} spacing={4} style={gridListStyle}>
                             {
                                 notesData.map((note, index) => (
                                     note.folder === folders[openFolder] && <GridListTile key={index} cols={2} rows={1} >
-                                        <Card onClick={() => {handleOpenNote(note)}} style={note.important ? {...gridListCardStyle, borderTop: '1px solid gold', height: '12vh'} : gridListCardStyle}>
+                                        <Card onClick={() => {handleOpenNote(note)}} style={note.important ? {...gridListCardStyle, borderTop: '1px solid gold', height: '13vh'} : gridListCardStyle}>
                                             <CardContent>
                                                 <Row>
                                                     <Col sm={10} xs={10} md={11} lg={11} xl={11}>
@@ -439,7 +436,7 @@ const Notes = ({ projectFirestore }) => {
             <DialogContent className={classes.root}><span style={{color: '#aaa', fontWeight: '400', fontSize: '1em'}}>{new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(currentNote.date)}</span></DialogContent>
             <DialogContent className={classes.root}>{currentNote.note}</DialogContent>
             <DialogActions className={classes.root}>
-            <Button color="secondary" style={ currentNote.important ? { color: 'gold' } : {  } }>
+            <Button color="secondary" style={ currentNote.important ? { color: 'gold' } : {  } } onClick={() => { handleNoteImportantToggle(currentNote) }} >
                 Important
             </Button>
             <Button onClick={() => {handleNoteDelete(currentNote)}} color="secondary">
