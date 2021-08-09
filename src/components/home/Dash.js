@@ -37,7 +37,7 @@ const Dash = ({ expandNavbarHandler, selected, setSelected }) => {
 				<IconButton onClick={() => {handleIndex(0)}}><DescriptionOutlined style={dashButtons}/><span style={buttonTextStyle}>{" Notes"}</span></IconButton>
 				<IconButton onClick={() => {handleIndex(1)}}><LinkOutlined style={dashButtons}/><span style={buttonTextStyle}>{" Links"}</span></IconButton>
 				<IconButton onClick={() => {handleIndex(2)}}><OutlinedFlag style={dashButtons}/><span style={buttonTextStyle}>{" Goals"}</span></IconButton>
-				<IconButton onClick={() => {handleIndex(3)}}><BookOutlined style={dashButtons}/><span style={buttonTextStyle}>{" Diary"}</span></IconButton>
+				<IconButton onClick={() => {handleIndex(3)}}><BookOutlined style={dashButtons}/><span style={buttonTextStyle}>{" Studies"}</span></IconButton>
 				{/* <IconButton onClick={() => {handleIndex(4)}}><SettingsApplicationsOutlined style={dashButtons}/><span style={buttonTextStyle}>{" Prefs"}</span></IconButton> */}
 			</CardContent>
 		</Card>
