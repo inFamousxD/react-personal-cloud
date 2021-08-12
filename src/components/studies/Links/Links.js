@@ -8,7 +8,7 @@ const Links = ({projectFirestore}) => {
     // Subtypes for links
     const [types, setTypes] = React.useState([]);
     // Type data
-    const [linksData, setLinksData] = React.useState({});
+    const [linksData, setLinksData] = React.useState([]);
 
 
     React.useEffect(() => {
@@ -17,18 +17,20 @@ const Links = ({projectFirestore}) => {
         });
 
         let ld = [];
-        loadingState && types.forEach(type => {
+        loadingState && types.forEach((type, index) => {
             projectFirestore.collection('studies').doc('links').collection(type).get().then(linkDataSet => {
                 linkDataSet.forEach((linkData) => {
-                    let id = linkData.id;
                     let data = linkData.data();
-                    data = { ...data, id }
+                    let id = linkData.id;
+                    data = {...data, id, type};
                     ld.push(data);
                 });
             }).then(() => { 
-                setLinksData(ld.concat(linksData));
-                console.log(linksData);
-                setLoadingState(false);
+                if (index === types.length-1) {    
+                    setLinksData(...linksData, ld);
+                    console.log(linksData);
+                    setLoadingState(false);
+                }
             })
         });
     }, [projectFirestore, setTypes, loadingState, types, linksData]);
